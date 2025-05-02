@@ -23,14 +23,19 @@ import (
 // Constants for test
 const (
 	KVV1ReadTestType    = "kvv1_read"
+	KVV1ListTestType    = "kvv1_list"
 	KVV1WriteTestType   = "kvv1_write"
 	KVV1ReadTestMethod  = "GET"
+	KVV1ListTestMethod  = "LIST"
 	KVV1WriteTestMethod = "POST"
 )
 
 func init() {
 	TestList[KVV1ReadTestType] = func() BenchmarkBuilder {
 		return &KVV1Test{action: "read"}
+	}
+	TestList[KVV1ListTestType] = func() BenchmarkBuilder {
+		return &KVV1Test{action: "list"}
 	}
 	TestList[KVV1WriteTestType] = func() BenchmarkBuilder {
 		return &KVV1Test{action: "write"}
@@ -79,6 +84,14 @@ func (k *KVV1Test) read(client *api.Client) vegeta.Target {
 	}
 }
 
+func (k *KVV1Test) list(client *api.Client) vegeta.Target {
+	return vegeta.Target{
+		Method: KVV1ListTestMethod,
+		URL:    client.Address() + k.pathPrefix,
+		Header: k.header,
+	}
+}
+
 func (k *KVV1Test) write(client *api.Client) vegeta.Target {
 	secnum := int(1 + rand.Int31n(int32(k.numKVs)))
 	value := strings.Repeat("a", k.kvSize)
@@ -94,6 +107,8 @@ func (k *KVV1Test) Target(client *api.Client) vegeta.Target {
 	switch k.action {
 	case "write":
 		return k.write(client)
+	case "list":
+		return k.list(client)
 	default:
 		return k.read(client)
 	}
@@ -104,6 +119,8 @@ func (k *KVV1Test) GetTargetInfo() TargetInfo {
 	switch k.action {
 	case "write":
 		method = KVV1WriteTestMethod
+	case "list":
+		method = KVV1ListTestMethod
 	default:
 		method = KVV1ReadTestMethod
 	}
