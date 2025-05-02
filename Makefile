@@ -35,7 +35,7 @@ bin: dist
 
 PHONY: dockerbin
 dockerbin: dist
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux/amd64/vault-benchmark
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux/amd64/openbao-benchmark
 
 PHONY: cleanupimages
 cleanupimages:
