@@ -91,6 +91,7 @@ Below is a list of all currently available benchmark tests
 
 - [System Status Configuration Options](tests/system-status.md)
 - [System ACL Policy Configuration Options](tests/system-policies.md)
+- [System Mount Configuration Options](tests/system-mount.md)
 
 ## Global Configuration Options
 
