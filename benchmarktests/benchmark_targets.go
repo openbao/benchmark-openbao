@@ -16,7 +16,7 @@ import (
 
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/hcl/v2"
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 )
 

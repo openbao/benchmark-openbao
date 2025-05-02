@@ -13,7 +13,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
-	dockhelper "github.com/hashicorp/vault/sdk/helper/docker"
+	dockhelper "github.com/openbao/openbao/sdk/v2/helper/docker"
 )
 
 func CreateVaultBenchmarkContainer(t *testing.T, vaultAddr string, vaultToken string, configFile string) (func(), int64) {

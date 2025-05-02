@@ -24,7 +24,7 @@ import (
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/gohcl"
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iamcredentials/v1"

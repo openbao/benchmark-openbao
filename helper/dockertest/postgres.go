@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/docker/docker/api/types"
-	dockhelper "github.com/hashicorp/vault/sdk/helper/docker"
+	dockhelper "github.com/openbao/openbao/sdk/v2/helper/docker"
 )
 
 const (

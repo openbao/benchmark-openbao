@@ -19,7 +19,7 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault-benchmark/benchmarktests"
 	vbConfig "github.com/hashicorp/vault-benchmark/config"
-	vaultapi "github.com/hashicorp/vault/api"
+	vaultapi "github.com/openbao/openbao/api/v2"
 	"github.com/mitchellh/cli"
 	"github.com/posener/complete"
 	"github.com/prometheus/client_golang/prometheus"

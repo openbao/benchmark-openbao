@@ -21,8 +21,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/hashicorp/vault/api"
-	"github.com/hashicorp/vault/sdk/helper/certutil"
+	"github.com/openbao/openbao/api/v2"
+	"github.com/openbao/openbao/sdk/v2/helper/certutil"
 	"github.com/mitchellh/mapstructure"
 )
 

@@ -6,7 +6,7 @@ package benchmarktests
 import (
 	"time"
 
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 )
 

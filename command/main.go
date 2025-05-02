@@ -14,7 +14,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	"github.com/mattn/go-colorable"
 	"github.com/mitchellh/cli"
 )
