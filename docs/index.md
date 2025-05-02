@@ -90,6 +90,7 @@ Below is a list of all currently available benchmark tests
 ### System Tests
 
 - [System Status Configuration Options](tests/system-status.md)
+- [System ACL Policy Configuration Options](tests/system-policies.md)
 
 ## Global Configuration Options
 
