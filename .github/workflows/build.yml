@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PKG_NAME: "vault-benchmark"
+  PKG_NAME: "openbao-benchmark"
   METADATA: ""
 
 jobs:
@@ -265,4 +265,3 @@ jobs:
           dev_tags: |
             docker.io/hashicorppreview/${{ env.repo }}:${{ env.version }}-dev
             docker.io/hashicorppreview/${{ env.repo }}:${{ env.version }}-${{ github.sha }}
-
