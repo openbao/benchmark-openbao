@@ -6,7 +6,7 @@ package command
 import (
 	"strings"
 
-	"github.com/hashicorp/vault-benchmark/version"
+	"github.com/openbao/benchmark-openbao/version"
 	"github.com/mitchellh/cli"
 	"github.com/posener/complete"
 )

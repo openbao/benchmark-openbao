@@ -17,8 +17,8 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-hclog"
-	"github.com/hashicorp/vault-benchmark/benchmarktests"
-	vbConfig "github.com/hashicorp/vault-benchmark/config"
+	"github.com/openbao/benchmark-openbao/benchmarktests"
+	vbConfig "github.com/openbao/benchmark-openbao/config"
 	vaultapi "github.com/openbao/openbao/api/v2"
 	"github.com/mitchellh/cli"
 	"github.com/posener/complete"
