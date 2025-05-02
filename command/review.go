@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hashicorp/vault-benchmark/benchmarktests"
+	"github.com/openbao/benchmark-openbao/benchmarktests"
 	"github.com/mitchellh/cli"
 	"github.com/posener/complete"
 )

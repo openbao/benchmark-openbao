@@ -11,7 +11,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	"github.com/prometheus/client_golang/prometheus"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 )

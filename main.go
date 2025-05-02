@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/hashicorp/vault-benchmark/command"
+	"github.com/openbao/benchmark-openbao/command"
 )
 
 func init() {

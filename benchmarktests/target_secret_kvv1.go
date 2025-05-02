@@ -16,7 +16,7 @@ import (
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/gohcl"
-	"github.com/hashicorp/vault/api"
+	"github.com/openbao/openbao/api/v2"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 )
 
@@ -134,9 +134,8 @@ func (k *KVV1Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 		}
 	}
 
-	var setupIndex string
 	k.logger.Trace(mountLogMessage("secrets", "kvv1", mountPath))
-	err = client.WithResponseCallbacks(api.RecordState(&setupIndex)).Sys().Mount(mountPath, &api.MountInput{
+	err = client.Sys().Mount(mountPath, &api.MountInput{
 		Type: "kv",
 	})
 	if err != nil {
@@ -151,16 +150,8 @@ func (k *KVV1Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 		},
 	}
 
-	if setupIndex != "" {
-		client = client.WithRequestCallbacks(api.RequireState(setupIndex))
-	}
-
-	var lastIndex string
 	setupLogger.Trace("seeding secrets")
 	for i := 1; i <= k.config.NumKVs; i++ {
-		if i == k.config.NumKVs-1 {
-			client = client.WithResponseCallbacks(api.RecordState(&lastIndex))
-		}
 		_, err = client.Logical().Write(mountPath+"/secret-"+strconv.Itoa(i), secval)
 		if err != nil {
 			return nil, fmt.Errorf("error writing kvv1 secret: %v", err)
@@ -168,9 +159,6 @@ func (k *KVV1Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 	}
 
 	headers := http.Header{"X-Vault-Token": []string{client.Token()}, "X-Vault-Namespace": []string{client.Headers().Get("X-Vault-Namespace")}}
-	if lastIndex != "" {
-		headers["X-Vault-Index"] = []string{lastIndex}
-	}
 	return &KVV1Test{
 		pathPrefix: "/v1/" + mountPath,
 		action:     k.action,

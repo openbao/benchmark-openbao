@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/vault-benchmark/helper/dockertest"
-	"github.com/hashicorp/vault-benchmark/helper/dockertest/dockerjobs"
+	"github.com/openbao/benchmark-openbao/helper/dockertest"
+	"github.com/openbao/benchmark-openbao/helper/dockertest/dockerjobs"
 )
 
 func TestUserpass_Auth_Docker(t *testing.T) {

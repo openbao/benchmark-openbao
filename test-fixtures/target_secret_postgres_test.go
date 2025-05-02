@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hashicorp/vault-benchmark/helper/dockertest"
-	"github.com/hashicorp/vault-benchmark/helper/dockertest/dockerjobs"
+	"github.com/openbao/benchmark-openbao/helper/dockertest"
+	"github.com/openbao/benchmark-openbao/helper/dockertest/dockerjobs"
 )
 
 func TestPostgres_Secret_Docker(t *testing.T) {
