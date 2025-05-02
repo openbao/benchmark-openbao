@@ -4,6 +4,7 @@
 
 ## [Unreleased](https://github.com/hashicorp/vault-benchmark/tree/HEAD)
 
+- Add auth/secret engine mount benchmark [\#4](https://github.com/openbao/benchmark-openbao/pull/4)
 - Add `sys/policies/acl` benchmark [\#3](https://github.com/openbao/benchmark-openbao/pull/3)
 
 ## [v0.3.0](https://github.com/hashicorp/vault-benchmark/tree/v0.3.0) (May 6, 2024)
