@@ -18,7 +18,7 @@
 # devbuild compiles the binary
 # -----------------------------------
 FROM golang:latest AS devbuild
-ARG BIN_NAME=vault-benchmark
+ARG BIN_NAME=openbao-benchmark
 # Escape the GOPATH
 WORKDIR /build
 COPY . ./
@@ -28,7 +28,7 @@ RUN go build -o $BIN_NAME
 # dev runs the binary from devbuild
 # -----------------------------------
 FROM alpine:latest AS dev
-ARG BIN_NAME=vault-benchmark
+ARG BIN_NAME=openbao-benchmark
 # Export BIN_NAME for the CMD below, it can't see ARGs directly.
 ENV BIN_NAME=$BIN_NAME
 COPY --from=devbuild /build/$BIN_NAME /bin/
@@ -46,7 +46,7 @@ CMD /bin/$BIN_NAME
 # -----------------------------------
 FROM alpine:latest AS release-default
 
-ARG BIN_NAME=vault-benchmark
+ARG BIN_NAME=openbao-benchmark
 # Export BIN_NAME for the CMD below, it can't see ARGs directly.
 ENV BIN_NAME=$BIN_NAME
 ARG PRODUCT_VERSION
@@ -55,10 +55,10 @@ ARG PRODUCT_NAME=$BIN_NAME
 # TARGETARCH and TARGETOS are set automatically when --platform is provided.
 ARG TARGETOS TARGETARCH
 
-LABEL maintainer="Team Vault Customer Engineering <team-vault-customer-engineering@hashicorp.com>"
+# LABEL maintainer="Team Vault Customer Engineering <team-vault-customer-engineering@hashicorp.com>"
 LABEL version=$PRODUCT_VERSION
 LABEL revision=$PRODUCT_REVISION
-LABEL org.opencontainers.image.licenses="MPL-2.0"
+# LABEL org.opencontainers.image.licenses="MPL-2.0"
 
 # Create a non-root user to run the software.
 RUN addgroup $PRODUCT_NAME && \
@@ -68,4 +68,4 @@ COPY dist/$TARGETOS/$TARGETARCH/$BIN_NAME /bin/
 COPY LICENSE /usr/share/doc/$PRODUCT_NAME/LICENSE.txt
 
 USER $PRODUCT_NAME
-CMD ["/bin/vault-benchmark"]
+CMD ["/bin/openbao-benchmark"]
