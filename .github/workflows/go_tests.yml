@@ -12,7 +12,7 @@ name: go_tests
 on: [workflow_dispatch, push]
 
 env:
-  PKG_NAME: "openbao-benchmark"
+  PKG_NAME: "benchmark-openbao"
   METADATA: ""
 
 jobs:
