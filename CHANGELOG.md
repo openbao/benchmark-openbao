@@ -4,6 +4,7 @@
 
 ## [Unreleased](https://github.com/hashicorp/vault-benchmark/tree/HEAD)
 
+- Support benchmarking KVv1, KVv2, and ACL LIST operations [\#5](https://github.com/openbao/benchmark-openbao/pull/5)
 - Add auth/secret engine mount benchmark [\#4](https://github.com/openbao/benchmark-openbao/pull/4)
 - Add `sys/policies/acl` benchmark [\#3](https://github.com/openbao/benchmark-openbao/pull/3)
 
