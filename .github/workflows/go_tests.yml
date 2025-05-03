@@ -27,5 +27,5 @@ jobs:
       - name: Run Tests
         run: |
           make bin
-          export BENCHMARK_BINARY=$(pwd)/dist/linux/amd64/openbao-benchmark
+          export BENCHMARK_BINARY=$(pwd)/dist/linux/amd64/benchmark-openbao
           go test ./...
