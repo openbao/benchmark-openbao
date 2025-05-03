@@ -237,7 +237,7 @@ jobs:
           instructions: |
             make image
           tags: |
-            docker.io/openbao/${{ env.PKG_NAME }}:${{ env.version }}
+            docker.io/openbao/${{ env.repo }}:${{ env.version }}
           # dev_tags are tags that get automatically pushed whenever successful
           # builds make it to the stable channel. The intention is for these tags
           # to be used for early testing of new code prior to official releases
