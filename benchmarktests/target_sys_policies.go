@@ -24,8 +24,10 @@ import (
 
 const (
 	ACLPolicyReadType    = "acl_policy_read"
+	ACLPolicyListType    = "acl_policy_list"
 	ACLPolicyWriteType   = "acl_policy_write"
 	ACLPolicyReadMethod  = "GET"
+	ACLPolicyListMethod  = "LIST"
 	ACLPolicyWriteMethod = "POST"
 )
 
@@ -33,6 +35,9 @@ func init() {
 	// "Register" this test to the main test registry
 	TestList[ACLPolicyReadType] = func() BenchmarkBuilder {
 		return &ACLPolicyTest{action: "read"}
+	}
+	TestList[ACLPolicyListType] = func() BenchmarkBuilder {
+		return &ACLPolicyTest{action: "list"}
 	}
 	TestList[ACLPolicyWriteType] = func() BenchmarkBuilder {
 		return &ACLPolicyTest{action: "write"}
@@ -87,6 +92,14 @@ func (a *ACLPolicyTest) read(client *api.Client) vegeta.Target {
 	}
 }
 
+func (a *ACLPolicyTest) list(client *api.Client) vegeta.Target {
+	return vegeta.Target{
+		Method: ACLPolicyListMethod,
+		URL:    client.Address() + a.pathPrefix,
+		Header: a.header,
+	}
+}
+
 func (a *ACLPolicyTest) draftPolicy(paths int, pathLength int, capabilities []string) map[string]interface{} {
 	var policy string
 	for i := 0; i < paths; i++ {
@@ -128,6 +141,8 @@ func (a *ACLPolicyTest) Target(client *api.Client) vegeta.Target {
 	switch a.action {
 	case "write":
 		return a.write(client)
+	case "list":
+		return a.list(client)
 	default:
 		return a.read(client)
 	}
@@ -138,6 +153,8 @@ func (a *ACLPolicyTest) GetTargetInfo() TargetInfo {
 	switch a.action {
 	case "write":
 		method = ACLPolicyWriteMethod
+	case "list":
+		method = ACLPolicyListMethod
 	default:
 		method = ACLPolicyReadMethod
 	}

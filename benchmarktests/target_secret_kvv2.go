@@ -23,9 +23,13 @@ import (
 
 const (
 	KVV2ReadTestType    = "kvv2_read"
+	KVV2ListTestType    = "kvv2_list"
 	KVV2WriteTestType   = "kvv2_write"
 	KVV2ReadTestMethod  = "GET"
+	KVV2ListTestMethod  = "LIST"
 	KVV2WriteTestMethod = "POST"
+
+	MAX_UPGRADE_RETRY = 100
 )
 
 func init() {
@@ -34,6 +38,9 @@ func init() {
 	}
 	TestList[KVV2WriteTestType] = func() BenchmarkBuilder {
 		return &KVV2Test{action: "write"}
+	}
+	TestList[KVV2ListTestType] = func() BenchmarkBuilder {
+		return &KVV2Test{action: "list"}
 	}
 }
 
@@ -44,12 +51,14 @@ type KVV2Test struct {
 	action     string
 	numKVs     int
 	kvSize     int
+	detailed   bool
 	logger     hclog.Logger
 }
 
 type KVV2SecretTestConfig struct {
-	KVSize int `hcl:"kvsize,optional"`
-	NumKVs int `hcl:"numkvs,optional"`
+	KVSize   int  `hcl:"kvsize,optional"`
+	NumKVs   int  `hcl:"numkvs,optional"`
+	Detailed bool `hcl:"detailed,optional"`
 }
 
 func (k *KVV2Test) ParseConfig(body hcl.Body) error {
@@ -57,8 +66,9 @@ func (k *KVV2Test) ParseConfig(body hcl.Body) error {
 		Config *KVV2SecretTestConfig `hcl:"config,block"`
 	}{
 		Config: &KVV2SecretTestConfig{
-			KVSize: 1,
-			NumKVs: 1000,
+			KVSize:   1,
+			NumKVs:   1000,
+			Detailed: false,
 		},
 	}
 
@@ -79,6 +89,19 @@ func (k *KVV2Test) read(client *api.Client) vegeta.Target {
 	}
 }
 
+func (k *KVV2Test) list(client *api.Client) vegeta.Target {
+	path := "metadata"
+	if k.detailed {
+		path = "detailed-metadata"
+	}
+
+	return vegeta.Target{
+		Method: "LIST",
+		URL:    client.Address() + k.pathPrefix + "/" + path,
+		Header: k.header,
+	}
+}
+
 func (k *KVV2Test) write(client *api.Client) vegeta.Target {
 	secnum := int(1 + rand.Int31n(int32(k.numKVs)))
 	value := strings.Repeat("a", k.kvSize)
@@ -94,6 +117,8 @@ func (k *KVV2Test) Target(client *api.Client) vegeta.Target {
 	switch k.action {
 	case "write":
 		return k.write(client)
+	case "list":
+		return k.list(client)
 	default:
 		return k.read(client)
 	}
@@ -104,6 +129,8 @@ func (k *KVV2Test) GetTargetInfo() TargetInfo {
 	switch k.action {
 	case "write":
 		method = KVV2WriteTestMethod
+	case "list":
+		method = KVV2ListTestMethod
 	default:
 		method = KVV2ReadTestMethod
 	}
@@ -128,6 +155,8 @@ func (k *KVV2Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 	switch k.action {
 	case "write":
 		k.logger = targetLogger.Named(KVV2WriteTestType)
+	case "list":
+		k.logger = targetLogger.Named(KVV2ListTestType)
 	default:
 		k.logger = targetLogger.Named(KVV2ReadTestType)
 	}
@@ -161,7 +190,17 @@ func (k *KVV2Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 	// TODO: Find more deterministic way of avoiding this
 	// Avoid error of the form:
 	// * Upgrading from non-versioned to versioned data. This backend will be unavailable for a brief period and will resume service shortly.
-	time.Sleep(2 * time.Second)
+	for i := 1; i <= MAX_UPGRADE_RETRY; i++ {
+		_, err = client.Logical().Read(mountPath + "/config")
+		if err == nil {
+			break
+		}
+		if !strings.Contains(err.Error(), "Upgrading from non-versioned to versioned data.") {
+			return nil, fmt.Errorf("cannot read KVv2 configuration: %w", err)
+		}
+
+		time.Sleep(time.Duration(i) * 10 * time.Millisecond)
+	}
 
 	setupLogger.Trace("seeding secrets")
 	for i := 1; i <= k.config.NumKVs; i++ {
@@ -176,6 +215,7 @@ func (k *KVV2Test) Setup(client *api.Client, mountName string, topLevelConfig *T
 		header:     http.Header{"X-Vault-Token": []string{client.Token()}, "X-Vault-Namespace": []string{client.Headers().Get("X-Vault-Namespace")}},
 		numKVs:     k.config.NumKVs,
 		kvSize:     k.config.KVSize,
+		detailed:   k.config.Detailed,
 		logger:     k.logger,
 		action:     k.action,
 	}, nil
