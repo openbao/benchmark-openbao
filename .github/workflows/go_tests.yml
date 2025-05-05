@@ -12,7 +12,7 @@ name: go_tests
 on: [workflow_dispatch, push]
 
 env:
-  PKG_NAME: "vault-benchmark"
+  PKG_NAME: "benchmark-openbao"
   METADATA: ""
 
 jobs:
@@ -27,5 +27,5 @@ jobs:
       - name: Run Tests
         run: |
           make bin
-          export BENCHMARK_BINARY=$(pwd)/dist/linux/amd64/vault-benchmark
+          export BENCHMARK_BINARY=$(pwd)/dist/linux/amd64/benchmark-openbao
           go test ./...
