@@ -24,26 +24,27 @@ const (
 )
 
 type VaultBenchmarkCoreConfig struct {
-	Remain         hcl.Body                          `hcl:",remain"`
-	VaultAddr      string                            `hcl:"vault_addr,optional"`
-	VaultToken     string                            `hcl:"vault_token,optional"`
-	VaultNamespace string                            `hcl:"vault_namespace,optional"`
-	Duration       string                            `hcl:"duration,optional"`
-	ReportMode     string                            `hcl:"report_mode,optional"`
-	AuditPath      string                            `hcl:"audit_path,optional"`
-	Annotate       string                            `hcl:"annotate,optional"`
-	ClusterJSON    string                            `hcl:"cluster_json,optional"`
-	CAPEMFile      string                            `hcl:"ca_pem_file,optional"`
-	PPROFInterval  string                            `hcl:"pprof_interval,optional"`
-	LogLevel       string                            `hcl:"log_level,optional"`
-	Tests          []*benchmarktests.BenchmarkTarget `hcl:"test,block"`
-	RPS            int                               `hcl:"rps,optional"`
-	Workers        int                               `hcl:"workers,optional"`
-	RandomMounts   bool                              `hcl:"random_mounts,optional"`
-	InputResults   bool                              `hcl:"input_results,optional"`
-	Cleanup        bool                              `hcl:"cleanup,optional"`
-	Debug          bool                              `hcl:"debug,optional"`
-	DisableHTTP2   bool                              `hcl:"disable_http2,optional"`
+	Remain           hcl.Body                          `hcl:",remain"`
+	VaultAddr        string                            `hcl:"vault_addr,optional"`
+	VaultToken       string                            `hcl:"vault_token,optional"`
+	VaultNamespace   string                            `hcl:"vault_namespace,optional"`
+	Duration         string                            `hcl:"duration,optional"`
+	ReportMode       string                            `hcl:"report_mode,optional"`
+	AuditPath        string                            `hcl:"audit_path,optional"`
+	Annotate         string                            `hcl:"annotate,optional"`
+	ClusterJSON      string                            `hcl:"cluster_json,optional"`
+	CAPEMFile        string                            `hcl:"ca_pem_file,optional"`
+	PPROFInterval    string                            `hcl:"pprof_interval,optional"`
+	LogLevel         string                            `hcl:"log_level,optional"`
+	Tests            []*benchmarktests.BenchmarkTarget `hcl:"test,block"`
+	RPS              int                               `hcl:"rps,optional"`
+	Workers          int                               `hcl:"workers,optional"`
+	RandomMounts     bool                              `hcl:"random_mounts,optional"`
+	InputResults     bool                              `hcl:"input_results,optional"`
+	Cleanup          bool                              `hcl:"cleanup,optional"`
+	Debug            bool                              `hcl:"debug,optional"`
+	DisableHTTP2     bool                              `hcl:"disable_http2,optional"`
+	DisableKeepAlive bool                              `hcl:"disable_keep_alive,optional"`
 }
 
 func NewVaultBenchmarkCoreConfig() *VaultBenchmarkCoreConfig {

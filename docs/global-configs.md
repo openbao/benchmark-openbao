@@ -14,6 +14,8 @@
 
 `-disable_http2` `(bool: false)` - Disables HTTP/2 on the Vault client. This prevents benchmark from multiplexing connections to a single Vault server over HTTP/2.
 
+`-disable_keep_alive` `(bool: false)` - Disables HTTP Keep-Alive on the Vault client. This ensures a new TCP connection is made for every request, which is useful when benchmarking a Vault cluster behind a load balancer.
+
 `-duration` `(string: "10s")` - Test Duration.
 
 `-log_level` `(string: "INFO")` - Level to emit logs. Options are: INFO, WARN, DEBUG, TRACE. This can also be specified via the `VAULT_BENCHMARK_LOG_LEVEL` environment variable.
