@@ -17,10 +17,10 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-hclog"
+	"github.com/mitchellh/cli"
 	"github.com/openbao/benchmark-openbao/benchmarktests"
 	vbConfig "github.com/openbao/benchmark-openbao/config"
 	vaultapi "github.com/openbao/openbao/api/v2"
-	"github.com/mitchellh/cli"
 	"github.com/posener/complete"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -56,6 +56,7 @@ type RunCommand struct {
 	flagCleanup          bool
 	flagDebug            bool
 	flagDisableHTTP2     bool
+	flagDisableKeepAlive bool
 }
 
 func (r *RunCommand) Synopsis() string {
@@ -223,6 +224,13 @@ func (r *RunCommand) Flags() *FlagSets {
 		Usage:   "Force HTTP/1.1",
 	})
 
+	f.BoolVar(&BoolVar{
+		Name:    "disable_keep_alive",
+		Target:  &r.flagDisableKeepAlive,
+		Default: false,
+		Usage:   "Disable TCP connection reuse",
+	})
+
 	// Add any additional flags from tests
 	for _, vbTest := range benchmarktests.TestList {
 		vbTest().Flags(f.mainSet)
@@ -363,7 +371,7 @@ func (r *RunCommand) Run(args []string) int {
 		}
 
 		// Check if we're forcing HTTP/1.1. Used to make sure benchmark traffic
-		// is spread across nodes when Vault is behind a load balancer.
+		// is spread across nodes when OpenBao is behind a load balancer.
 		if conf.DisableHTTP2 {
 			benchmarkLogger.Warn("http2 disabled, using http/1.1")
 			transport := cfg.HttpClient.Transport.(*http.Transport)
@@ -371,6 +379,14 @@ func (r *RunCommand) Run(args []string) int {
 			transport.TLSNextProto = map[string]func(string, *tls.Conn) http.RoundTripper{}
 			transport.ForceAttemptHTTP2 = false
 			cfg.HttpClient.Transport = transport
+		}
+
+		// Check if we're forcing a new connection per request. Used to make
+		// sure benchmark traffic is spread across nodes when OpenBao is behind
+		// a TCP load balancer.
+		if conf.DisableKeepAlive {
+			benchmarkLogger.Warn("tcp connection reuse disabled")
+			cfg.HttpClient.Transport.(*http.Transport).DisableKeepAlives = true
 		}
 
 		cfg.Address = addr
@@ -623,6 +639,13 @@ func (r *RunCommand) applyConfigOverrides(f *FlagSets, config *vbConfig.VaultBen
 		Default: false,
 	})
 	config.DisableHTTP2 = r.flagDisableHTTP2
+
+	r.setBoolFlag(f, config.DisableKeepAlive, &BoolVar{
+		Name:    "disable_keep_alive",
+		Target:  &r.flagDisableKeepAlive,
+		Default: false,
+	})
+	config.DisableKeepAlive = r.flagDisableKeepAlive
 }
 
 func (r *RunCommand) setBoolFlag(f *FlagSets, configVal bool, fVar *BoolVar) {
