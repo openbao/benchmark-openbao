@@ -26,6 +26,7 @@ This benchmark tests the performance of the transit operations.
   hour. Uses [duration format strings](/vault/docs/concepts/duration-format).
 - `managed_key_name` _(string: "")_ - The name of the managed key to use for this transit key.
 - `managed_key_id` _(string: "")_ - The UUID of the managed key to use for this transit key.
+- `external_key_ref` _(string: "")_ - The external key reference to use for this transit key. Must have a mount grant already set up; use with `-random_mounts=false`.
 
 ### Sign Config `sign`
 
