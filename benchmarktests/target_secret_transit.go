@@ -68,6 +68,7 @@ type TransitConfigKeys struct {
 	AutoRotatePeriod     string `hcl:"auto_rotate_period,optional"`
 	ManagedKeyName       string `hcl:"managed_key_name,optional"`
 	ManagedKeyID         string `hcl:"managed_key_id,optional"`
+	ExternalKeyRef       string `hcl:"external_key_ref,optional"`
 }
 
 // /transit/sign/:name
